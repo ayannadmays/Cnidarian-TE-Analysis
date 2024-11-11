@@ -1,5 +1,8 @@
 ###will use the output files created from repeatmodeler to calculate the divergence (age) of TEs in the genome
 
+#open a job script and title it
+nano repeatmasker_aurelia_job
+
 #!/bin/bash
 
 #SBATCH -p 128x24   # Partition name
