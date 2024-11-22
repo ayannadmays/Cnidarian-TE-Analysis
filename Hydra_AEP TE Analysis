@@ -21,3 +21,5 @@ module load repeatmodeler
 BuildDatabase -name hydra_AEP_db hydra_AEP.fna
 
 RepeatModeler -engine ncbi -threads 16 -database hydra_AEP_db
+
+#.stk and consensi files produces in a new folder. Consensi file is the families
