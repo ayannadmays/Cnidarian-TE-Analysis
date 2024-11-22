@@ -22,4 +22,6 @@ BuildDatabase -name hydra_AEP_db hydra_AEP.fna
 
 RepeatModeler -engine ncbi -threads 16 -database hydra_AEP_db
 
-#.stk and consensi files produces in a new folder. Consensi file is the families
+#.stk and consensi files is produced in a new folder. Consensi file is the families.fa file. I renamed it from consensi.fa to hydra_AEP_db-families.fa for specificity
+
+nano repeatmasker_hydra_AEP
