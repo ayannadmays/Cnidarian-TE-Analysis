@@ -19,6 +19,8 @@ nano aurelia_aurita_job #creates a job
 #SBATCH -t 64:00:00  # Run Time (hh:mm:ss) - 1.5 hours (optional)
 #SBATCH --mem=12G # Memory to be allocated PER NODE
 
+export LC_ALL='C'
+
 #load repeat modeler
 module load repeatmodeler
 #make a genome database with your genome so repeat modeler can use your genome file (my genome file is aurelia_aurita_genome and I'm naming the database auralia_aurita_db)
@@ -26,9 +28,6 @@ BuildDatabase -name aurelia_aurita_db aurelia_aurita_genome
 #run repeat modeler
 RepeatModeler -engine ncbi -threads 16 -database aurelia_aurita_db
 
-export LANGUAGE=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
 
 #now save the job script with Ctrl+O (the letter O) and press enter to save its name
 #once its saved, press Ctrl+X to exit the editor
