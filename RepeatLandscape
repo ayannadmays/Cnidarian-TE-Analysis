@@ -12,4 +12,7 @@
 
 module load repeatmodeler
 
-creatRepeatLandscape.pl -div repeatlandscape_aurelia_job -g 376932402 > repeatlandscape_aurelia_aurita.html
+#input .tbl file (with divergence numbers) and genome size, then name the output html file
+createRepeatLandscape.pl -div aurelia_aurita_genome.fna.tbl -g 376932402 > repeatlandscape_aurelia_aurita.html
+
+#use filezilla to store html file to computer and open landscape graph on browser
