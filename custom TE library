@@ -3,11 +3,14 @@
 #download dfam library specifically curated for repeatmasker
 wget https://dfam.org/releases/Dfam_3.8/families/Dfam-RepeatMasker.lib.gz
 
-# file saved as Dfam-RepeatMasker.lib.gz, unable to view but still usable for repeatmasker (is red when downloaded)
+#file saved as Dfam-RepeatMasker.lib.gz, unable to view (is red when downloaded)
+
+#unzip file using gunzip (for .gz files), is no longer red
+gunzip Dfam-RepeatMasker.lib.gz
 
 #combine downloaded dfam library with already built families.fa file from repeatmodeler.
 cat aurelia_aurita_db-families.fa Dfam-RepeatMasker.lib.gz > combined_TE_library.fasta
 
 #build a database that RepeatMasker can use from the newly combined library
-buildDatabase -name combined_TE_library_db combined_TE_library.fasta
+BuildDatabase -name combined_TE_library_db combined_TE_library.fasta
 
