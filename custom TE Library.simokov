@@ -1,0 +1,10 @@
+#methods from https://github.com/ironman-tetsuo/Hydra_TE/blob/main/running_repeatmodeler.md
+#custom TE library goes in between repeatmodeler and repeatmasker steps
+
+#download, unzip, and press dfam TE families file
+wget https://www.dfam.org/releases/Dfam_3.8/families/Dfam.hmm.gz
+gunzip Dfam.hmm.gz
+hmmpress Dfam.hmm
+
+#run nhmmscan to find homologous sequences between your genome families file and the dfam file. This gives names to the unknowns
+nhmmscan --tblout tblout --cpu ${thread} Dfam.hmm GENOME-families.fa > /dev/null
