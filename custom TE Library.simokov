@@ -6,8 +6,23 @@ wget https://www.dfam.org/releases/Dfam_3.8/families/Dfam.hmm.gz
 gunzip Dfam.hmm.gz
 hmmpress Dfam.hmm
 
-#run nhmmscan to find homologous sequences between your genome families file and the dfam file. This gives names to the unknowns
-nhmmscan --tblout tblout --cpu ${thread} Dfam.hmm GENOME-families.fa > /dev/null
+#run nhmmscan in a job to find homologous sequences between your genome families file and the dfam file. This gives names to the unknowns
 
-#run nhmm scan in a job
-nhmmscan --tblout tblout --cpu ${thread} Dfam.hmm GENOME-families.fa > /dev/null
+#!/bin/bash
+
+#SBATCH -p 128x24   # Partition name
+#SBATCH -J repeatmasker        # Job name
+#SBATCH --mail-user=aymays@ucsc.edu
+#SBATCH --mail-type=ALL
+#SBATCH -o repeatmasker_aurelia.out    # Name of stdout output file
+#SBATCH -N 1       # Total number of nodes requested (128x24/Instructional only)
+#SBATCH -n 16        # Total number of mpi tasks requested per node
+#SBATCH -t 64:00:00  # Run Time (hh:mm:ss) - 1.5 hours (optional)
+#SBATCH --mem=24G # Memory to be allocated PER NODE
+
+#sets language and character settings for the output files, put before code
+export LC_ALL='C'
+
+module load hmmer/3.4
+
+nhmmscan --tblout nhmmscan.tbl Dfam.hmm GENOME-families.fa > /dev/null
