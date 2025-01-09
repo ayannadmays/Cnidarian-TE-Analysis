@@ -8,3 +8,6 @@ hmmpress Dfam.hmm
 
 #run nhmmscan to find homologous sequences between your genome families file and the dfam file. This gives names to the unknowns
 nhmmscan --tblout tblout --cpu ${thread} Dfam.hmm GENOME-families.fa > /dev/null
+
+#run nhmm scan in a job
+nhmmscan --tblout tblout --cpu ${thread} Dfam.hmm GENOME-families.fa > /dev/null
