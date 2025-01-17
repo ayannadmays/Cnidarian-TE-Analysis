@@ -1,18 +1,13 @@
 #this uses the Dfam-RepeatMasker.lib.gz file from the dfam website to create a custom TE library, reducing the amount of unknowns in the repeatlandscape graph
 
-#download dfam library specifically curated for repeatmasker
-wget https://dfam.org/releases/Dfam_3.8/families/Dfam-RepeatMasker.lib.gz
+#download dfam library specifically containing TE families
+wget https://dfam.org/releases/Dfam_3.8/families/Dfam.embl.gz
 
-#file saved as Dfam-RepeatMasker.lib.gz, unable to view (is red when downloaded)
+#file saved as dfam.hmm.gz, unable to view (is red when downloaded)
 
 #unzip file using gunzip (for .gz files), is no longer red
-gunzip Dfam-RepeatMasker.lib.gz
+gunzip dfam.hmm.gz
 
-#combine downloaded dfam library with already built database file from repeatmodeler.
-cat aurelia_aurita_db Dfam-RepeatMasker.lib.gz > combined_TE_library.fasta
 
-#build a database that RepeatMasker can use from the newly combined library
-BuildDatabase -name combined_TE_library_db combined_TE_library.fasta
 
-#use database as input in repeatmasker
 
