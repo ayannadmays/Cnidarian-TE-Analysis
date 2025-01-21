@@ -24,5 +24,4 @@ hmmpress Dfam.hmm
 export LC_ALL='C'
 
 module load hmmer/3.4
-
-nhmmscan --tblout nhmmscan.tbl Dfam.hmm GENOME-families.fa > /dev/null
+nhmmscan --tblout nhmmscan.tbl --incE 0.05 Dfam.hmm aurelia_aurita_db-families.fa > /dev/null
