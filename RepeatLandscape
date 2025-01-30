@@ -13,6 +13,6 @@
 module load repeatmodeler
 
 #input .divsum file (with divergence numbers) and genome size, then name the output html file
-createRepeatLandscape.pl -div aurelia_aurita_genome.fna.tbl -g 376932402 > repeatlandscape_aurelia_aurita.html
+createRepeatLandscape.pl -div aurelia_aurita_genome.fna.divsum -g 376932402 > repeatlandscape_aurelia_aurita.html
 
 #use filezilla to store html file to computer and open landscape graph on browser
