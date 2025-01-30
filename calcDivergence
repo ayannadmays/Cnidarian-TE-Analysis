@@ -18,7 +18,7 @@ export LC_ALL='C'
 
 module load repeatmodeler
 
-calcDivergenceFromAlign.pl -s aurelia_aurita.fna.tbl aurelia_aurita_genome.fna.align
+calcDivergenceFromAlign.pl -s aurelia_aurita.fna.divsum aurelia_aurita_genome.fna.align
 
 
 
