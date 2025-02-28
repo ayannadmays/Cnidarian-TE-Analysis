@@ -1,0 +1,13 @@
+#this uses the Dfam-RepeatMasker.lib.gz file from the dfam website to create a custom TE library, reducing the amount of unknowns in the repeatlandscape graph
+
+#download dfam library specifically containing TE families
+wget https://dfam.org/releases/Dfam_3.8/families/Dfam.embl.gz
+
+#file saved as dfam.hmm.gz, unable to view (is red when downloaded)
+
+#unzip file using gunzip (for .gz files), is no longer red
+gunzip dfam.hmm.gz
+
+
+
+
