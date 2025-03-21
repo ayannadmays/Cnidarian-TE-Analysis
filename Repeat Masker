@@ -13,7 +13,7 @@ nano repeatmasker_aurelia_job
 #SBATCH -N 1       # Total number of nodes requested (128x24/Instructional only)
 #SBATCH -n 16        # Total number of mpi tasks requested per node
 #SBATCH -t 64:00:00  # Run Time (hh:mm:ss) - 1.5 hours (optional)
-#SBATCH --mem=24G # Memory to be allocated PER NODE
+#SBATCH --mem=100G # Memory to be allocated PER NODE
 
 #sets language and character settings for the output files, put before code
 export LC_ALL='C'
