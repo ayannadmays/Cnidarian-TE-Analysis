@@ -19,4 +19,7 @@ RepeatMasker -pa 16 -species eumetazoa hydra_AEP.fna
 #pool the masking results from custom database masker run to masker with dfam database
 zcat custommaskfile/*cat dfammaskfile/*cat > completemask_Hydra_AEP.cat
 
+#use ProcessRepeats to get a repeatmasker file with both information
+ProcessRepeats -a -species eumetazoa -gff bothMaskFull.cat
+
 
