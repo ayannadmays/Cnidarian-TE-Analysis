@@ -16,10 +16,12 @@ export LC_ALL='C'
 module load repeatmodeler
 RepeatMasker -pa 16 -species eumetazoa hydra_AEP.fna
 
-#pool the masking results from custom database masker run to masker with dfam database
-zcat custommaskfile/*cat dfammaskfile/*cat > completemask_Hydra_AEP.cat
+#results in genome_name.cat.gz. move cat.gz files from original repeat masker and dfam repeat masker into different folders
+#pool the cat files together; custommaskfile and dfammaskfile are folder names, *cat takes file from folders that ends in cat, zcat merges them. 
+#if unzipped use cat instead of zcat
+zcat custommaskfile/*cat dfammaskfile/*cat > combinedmask.cat
 
-#use ProcessRepeats to get a repeatmasker file with both information
-ProcessRepeats -a -species eumetazoa -gff bothMaskFull.cat
+#use ProcessRepeats to get a repeatmasker files with both information
+ProcessRepeats -a -species eumetazoa -gff combinedmask.cat
 
 
