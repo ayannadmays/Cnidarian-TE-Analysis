@@ -1,3 +1,22 @@
-#using singularity within repeatmodeler to clarify unclassified TEs using dfam database within repeatmodeler
+#using dfam datasbase within repeatmodeler to do repeatmasker ansd clarify repeats not found from custom built modeler
 
-singularity exec -B /hb/home/aymays/genomework/hydra_aep/hydra_AEP_hydra_AEP_singularity ~/maker-plus_3.01.03.sif RepeatMasker -pa 24 -lib hydra_AEP_db-families.fa hydra_AEP.fna
+#!/bin/bash
+
+#SBATCH -p 128x24   # Partition name
+#SBATCH -J dfam_repeatmasker_hydra_AEP        # Job name
+#SBATCH --mail-user=aymays@ucsc.edu
+#SBATCH --mail-type=ALL
+#SBATCH -o dfam_repeatmasker_hydra_AEP.out    # Name of stdout output file
+#SBATCH -N 1       # Total number of nodes requested (128x24/Instructional only)
+#SBATCH -n 16        # Total number of mpi tasks requested per node
+#SBATCH -t 64:00:00  # Run Time (hh:mm:ss) - 1.5 hours (optional)
+#SBATCH --mem=100G # Memory to be allocated PER NODE
+
+export LC_ALL='C'
+module load repeatmodeler
+RepeatMasker -pa 16 -species eumetazoa hydra_AEP.fna
+
+#pool the masking results from custom database masker run to masker with dfam database
+zcat custommaskfile/*cat dfammaskfile/*cat > completemask_Hydra_AEP.cat
+
+
