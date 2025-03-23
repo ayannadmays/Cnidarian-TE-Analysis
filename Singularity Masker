@@ -10,18 +10,30 @@
 #SBATCH -N 1       # Total number of nodes requested (128x24/Instructional only)
 #SBATCH -n 16        # Total number of mpi tasks requested per node
 #SBATCH -t 64:00:00  # Run Time (hh:mm:ss) - 1.5 hours (optional)
-#SBATCH --mem=100G # Memory to be allocated PER NODE
+#SBATCH --mem=50G # Memory to be allocated PER NODE
 
 export LC_ALL='C'
 module load repeatmodeler
 RepeatMasker -pa 16 -species eumetazoa hydra_AEP.fna
 
-#results in genome_name.cat.gz. move cat.gz files from original repeat masker and dfam repeat masker into different folders
-#pool the cat files together; custommaskfile and dfammaskfile are folder names, *cat takes file from folders that ends in cat, zcat merges them. 
-#if unzipped use cat instead of zcat
-zcat custommaskfile/*cat dfammaskfile/*cat > combinedmask.cat
+#results in genome_name.cat.gz. move cat.gz files from original repeat masker and dfam repeat masker into different folders - pool the cat files together; custommaskfile and dfammaskfile are folder names, *cat takes file from folders that ends in cat, zcat merges them - if unzipped use cat instead of zcat
+zcat original_hydra_AEP.cat/*cat.gz dfam_hydra_AEP.cat/*cat.gz > combinedmask.cat
 
 #use ProcessRepeats to get a repeatmasker files with both information
+#!/bin/bash
+
+#SBATCH -p 128x24   # Partition name
+#SBATCH -J process_repeats_hydra_AEP        # Job name
+#SBATCH --mail-user=aymays@ucsc.edu
+#SBATCH --mail-type=ALL
+#SBATCH -o process_repeats_hydra_AEP.out    # Name of stdout output file
+#SBATCH -N 1       # Total number of nodes requested (128x24/Instructional only)
+#SBATCH -n 16        # Total number of mpi tasks requested per node
+#SBATCH -t 64:00:00  # Run Time (hh:mm:ss) - 1.5 hours (optional)
+#SBATCH --mem=15G # Memory to be allocated PER NODE
+
+export LC_ALL='C'
+module load repeatmodeler
 ProcessRepeats -a -species eumetazoa -gff combinedmask.cat
 
 
