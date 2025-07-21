@@ -1,0 +1,10 @@
+#!/bin/bash
+#SBATCH -p 128x24 
+#SBATCH -J download_aur_coe      
+#SBATCH --mail-user=aymays@ucsc.edu
+#SBATCH --mail-type=ALL
+#SBATCH -o download_aur_coe.out  
+#SBATCH -N 1   
+#SBATCH -n 16       
+#SBATCH -t 4:00:00  
+#SBATCH --mem=5G 
