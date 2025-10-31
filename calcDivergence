@@ -1,25 +1,25 @@
 nano calcdiv_aurelia_job
 
+/hb/groups/macias-munoz_lab/calcDivergenceFromAlignment_custom.pl
+
+my job script was: 
 #!/bin/bash
 
-#SBATCH -p 128x24   # Partition name
-#SBATCH -J calcdiv        # Job name
-#SBATCH --mail-user=aymays@ucsc.edu
-#SBATCH --mail-type=ALL
-#SBATCH -o calcdiv_aurelia.out    # Name of stdout output file
-#SBATCH -N 1       # Total number of nodes requested (128x24/Instructional only)
-#SBATCH -n 16        # Total number of mpi tasks requested per node
-#SBATCH -t 64:00:00  # Run Time (hh:mm:ss) - 1.5 hours (optional)
-#SBATCH --mem=12G # Memory to be allocated PER NODE
-
-
-# Set locale environment variables
-export LC_ALL='C'
+#SBATCH --job-name=medusozoa_calcdiv_          
+#SBATCH --mail-user=aymays@ucsc.edu 
+#SBATCH --mail-type=ALL      
+#SBATCH --partition=lab-amaciasmunoz        
+#SBATCH --time=1-00:00:00                  
+#SBATCH --ntasks=1                    
+#SBATCH --cpus-per-task=2         
+#SBATCH --mem=5G                         
+#SBATCH --qos=pi-amaciasmunoz             
+#SBATCH --account=pi-amaciasmunoz        
+#SBATCH --output=medusozoa_calcdiv_.out
 
 module load repeatmodeler
+perl /hb/groups/macias-munoz_lab/calcDivergenceFromAlignment_custom.pl -s hydraAEP_custom2.divsum -tbl hydra_AEP.fna.tbl hydra_AEP.fna.align
 
-#name output of Kimura divergences as file.divsum, input is .align file
-calcDivergenceFromAlign.pl -s aurelia_aurita.fna.divsum aurelia_aurita_genome.fna.align
-
-
+#next; replace aep.divsum with the name of divsum file and kimuraAEP.txt with name of your species eg. kimura_aur_aur.txt
+csplit -f aepDiv aep.divsum '/Coverage for each repeat/' '{0}' && sed '1d' aepDiv01 > kimuraAEP.txt && rm aepDiv0*
 
