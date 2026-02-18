@@ -1,0 +1,11 @@
+#concatenate repeat modeler libraries
+cat *families.fa > medusazoa_rep_lib.fasta
+
+#remove redudancies (80-80-80 rule)
+cd-hit-est -i medusazoa_rep_lib.fasta -o medusazoa_rep_lib_B.fasta -c 0.8 -aS 0.8 -n 5 -M 16000 -T 8
+
+#extract out unknowns
+seqtk subseq Actiniaria-REPlib_B.fasta <(grep "Unknown" medusazoa_rep_lib_B.fasta | cut -d' ' -f1 | sed 's/>//') > unknowns_TEs.fasta
+
+#download DeepTE.py (https://github.com/LiLabAtVT/DeepTE/blob/master/DeepTE.py) and re-annotate unknowns_TEs.fasta (-sp and -m set to metazoan)
+python DeepTE.py -d working_dir -o output_dir -i unknown_TEs.fasta -sp M -m M
