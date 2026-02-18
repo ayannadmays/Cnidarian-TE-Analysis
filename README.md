@@ -1,3 +1,8 @@
+Intro
+Technologies used (packages)
+
+
+
 #this repository is the code used to analyze TE composition in severla Cnidarian genomes. 
 
 The pipeline goes as follows:
