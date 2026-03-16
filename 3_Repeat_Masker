@@ -1,30 +1,26 @@
 ###run repeatmasker using the medusozoa library as input
 
-#open a job script and title it
-nano medusozoa_repeatmasker_hydra_AEP
-
 #!/bin/bash
 
-#SBATCH --job-name=medusozoa_repeatmasker_hydra_AEP            
-#SBATCH --mail-user=aymays@ucsc.edu   
+#SBATCH --job-name= ...          
+#SBATCH --mail-user= ... 
 #SBATCH --mail-type=ALL         
-#SBATCH --partition=lab-amaciasmunoz     
+#SBATCH --partition= ...     
 #SBATCH --time=5-01:02:00                  
 #SBATCH --ntasks=1                         
 #SBATCH --cpus-per-task=2                  
 #SBATCH --mem=50G                          
-#SBATCH --qos=pi-amaciasmunoz             
-#SBATCH --account=pi-amaciasmunoz       
-#SBATCH --output=medusozoa_repeatmasker_hydra_AEP.out                 
+#SBATCH --qos= ...            
+#SBATCH --account= ...     
+#SBATCH --output=medusozoa_repeatmasker_species.out                 
 
-#sets language and character settings for the output files, put before code
+#sets language and character settings for the output files
 export LC_ALL='C'
 
 #load the module
 module load repeatmodeler
 
-#run repeatmasker, -lib specifies the library you want to use, -pa is the number of threads (power) you want to use to run it, then put the genome fasta file, -
-a says you want it to do alignment analysis (needed for calcdiv)
-RepeatMasker -lib /hb/home/aymays/cnidarianTE/medusozoa_rep_lib/2medusozoa_rep_lib_C.fasta -pa 16 hydra_AEP.fna -a
+#run repeatmasker, -lib specifies the library you want to use, -pa is the number of threads (power) you want to use, then put the genome fasta file, -a says you want it to do alignment analysis (needed for calcdiv)
+RepeatMasker -lib /hb/home/aymays/cnidarianTE/medusozoa_rep_lib/2medusozoa_rep_lib_C.fasta -pa 16 species_name.fna -a
 
 
