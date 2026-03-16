@@ -1,4 +1,4 @@
-###will use the output files created from repeatmodeler to calculate the divergence (age) of TEs in the genome
+###run repeatmasker using the medusozoa library as input
 
 #open a job script and title it
 nano medusozoa_repeatmasker_hydra_AEP
