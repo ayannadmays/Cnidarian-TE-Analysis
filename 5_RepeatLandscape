@@ -1,18 +1,5 @@
-#!/bin/bash
+###edited and exported divsum file to Rstudio to generate landscape graphs. Code sourced directly from https://github.com/cejuliano/brown_hydra_genomes/blob/main/02_repeatMasking/04_visRep/kimuraPlot.R (Cazet, 2023) with slight modification 
 
-#SBATCH -p 128x24   # Partition name
-#SBATCH -J repeatlandscape        # Job name
-#SBATCH --mail-user=aymays@ucsc.edu
-#SBATCH --mail-type=ALL
-#SBATCH -o repeatlandscape_aurelia.out    # Name of stdout output file
-#SBATCH -N 1       # Total number of nodes requested (128x24/Instructional only)
-#SBATCH -n 16        # Total number of mpi tasks requested per node
-#SBATCH -t 64:00:00  # Run Time (hh:mm:ss) - 1.5 hours (optional)
-#SBATCH --mem=12G # Memory to be allocated PER NODE
+csplit -f aepDiv aep.divsum '/Coverage for each repeat/' '{0}' && sed '1d' aepDiv01 > kimuraAEP.txt && rm aepDiv0*
 
-module load repeatmodeler
 
-#input .divsum file (with divergence numbers) and genome size, then name the output html file
-createRepeatLandscape.pl -div aurelia_aurita_genome.fna.divsum -g 376932402 > repeatlandscape_aurelia_aurita.html
-
-#use filezilla to store html file to computer and open landscape graph on browser
