@@ -31,4 +31,4 @@ We downloaded genomes from NCBI genome bank and processed them through multiple 
  10. Create repeatlandscape in Rstudio (per https://github.com/cejuliano/brown_hydra_genomes/blob/main/02_repeatMasking/04_visRep/kimuraPlot.R)
 
 # Data availability
-
+https://ayannadmays.github.io/Cnidarian-TE-Analysis/repSubFamKimura_kimura_boug.html
