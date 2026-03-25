@@ -1,5 +1,162 @@
-###edited and exported divsum file to Rstudio to generate landscape graphs. Code sourced directly from https://github.com/cejuliano/brown_hydra_genomes/blob/main/02_repeatMasking/04_visRep/kimuraPlot.R (Cazet, 2023) with slight modification 
+###input edited divsum file to Rstudio to generate landscape graphs. Code sourced from https://github.com/cejuliano/brown_hydra_genomes/blob/main/02_repeatMasking/04_visRep/kimuraPlot.R (Cazet, 2023) with slight modification 
 
-csplit -f aepDiv aep.divsum '/Coverage for each repeat/' '{0}' && sed '1d' aepDiv01 > kimuraAEP.txt && rm aepDiv0*
+library(rstudioapi)
+library(ggplot2)
+library(RColorBrewer)
+library(dplyr)
+library(plotly)
 
+#script from Cazet 2023 with slight modifications (color palette, interactive html)
 
+kimP <- function(file, size){
+  
+  # Import data
+  kDat <- read.delim(file, sep=' ')
+  
+  # Drop last column if it is all NAs
+  kDat <- kDat[,-ncol(kDat)]
+  
+  # Restructure the data so that all columns become rows with repeat class
+  kDat.plot <- lapply(2:ncol(kDat), function(x){
+    newDF <- kDat[,c(1,x)]
+    colnames(newDF) <- c('perc','cov')
+    newDF$ident <- colnames(kDat)[x]
+    return(newDF)
+  })
+  
+  kDat.plot <- do.call(rbind, kDat.plot)
+  
+  # Combine results from repeat subfamilies
+  kDat.plot$ident <- gsub('[.].*','', kDat.plot$ident)
+  kDat.plot <- aggregate(kDat.plot$cov, list(kDat.plot$perc, kDat.plot$ident), sum)
+  colnames(kDat.plot) <- c('perc','ident','cov')
+  
+  # Normalize coverage by genome size
+  kDat.plot$cov <- kDat.plot$cov / size
+  
+  # Minimum coverage threshold
+  threshold <- 0.0001 #repeatmasker default
+  kDat.plot <- kDat.plot[kDat.plot$cov >= threshold, ]
+  
+  # Drop RNA repeats and artefacts
+  kDat.plot <- kDat.plot[!grepl('RNA', kDat.plot$ident), ]
+  kDat.plot <- kDat.plot[!grepl('ARTEFACT', kDat.plot$ident), ]
+  
+  # Define colors
+  colourCount <- length(unique(kDat.plot$ident))
+  pal <- colorRampPalette(c('#556270','#4ECDC4','#C7F464','#FF6B6B','#C44D58'))(colourCount)
+  set.seed(12345)
+  pal <- sample(pal)
+  
+  # family plot and save
+  pFam <- ggplot(kDat.plot, aes(x=perc, y=cov, fill=ident)) +
+    geom_bar(stat="identity", position=position_stack(reverse=TRUE)) +
+    scale_fill_manual(name="Families", values=pal) +
+    xlim(-1,50) +
+    labs(x="Kimura Substitution Level (%)", y="Genome Proportion") +
+    theme_bw()
+  
+  fname_base <- tools::file_path_sans_ext(basename(file))
+  ggsave(paste0('repFamKimura_', fname_base, '.pdf'), pFam, width=8, height=6)
+  
+  # Rebuild for subfamily plot
+  kDat.plot <- lapply(2:ncol(kDat), function(x){
+    newDF <- kDat[,c(1,x)]
+    colnames(newDF) <- c('perc','cov')
+    newDF$ident <- colnames(kDat)[x]
+    return(newDF)
+  })
+  
+  kDat.plot <- do.call(rbind, kDat.plot)
+  
+  # Keep hierarchical subfamily name
+  kDat.plot$ident <- gsub('(^[^.]+[.][^.]+)[.].*','\\1', kDat.plot$ident)
+  kDat.plot$ident <- gsub('[.]+','.', kDat.plot$ident)
+  kDat.plot$ident <- gsub('[.]$','', kDat.plot$ident)
+  kDat.plot$ident <- gsub('[.]','/', kDat.plot$ident)
+  
+  kDat.plot <- aggregate(kDat.plot$cov, list(kDat.plot$perc, kDat.plot$ident), sum)
+  colnames(kDat.plot) <- c('perc','ident','cov')
+  kDat.plot$cov <- kDat.plot$cov / size
+  
+  # Minimum coverage
+  kDat.plot <- kDat.plot[kDat.plot$cov >= threshold, ]
+  
+  # Drop RNA
+  kDat.plot <- kDat.plot[!grepl('RNA', kDat.plot$ident), ]
+  
+  # Factor cleanup
+  kDat.plot$ident <- droplevels(factor(kDat.plot$ident))
+  
+  # Colors
+  master_colors <- c(
+    "ClassI"="#FFAA00","ClassII"="#FFBB33","ClassIII/Helitron"="#FFCC66",
+    "DNA"="#f3331b","DNA/Academ"="#f33f22","DNA/CACTA"="#f4512e",
+    "DNA/CMC"="#f45935","DNA/Crypton"="#f4613b","DNA/Dada"="#f57048",
+    "DNA/Ginger"="#f46842","DNA/Harbinger"="#f5764f","DNA/hAT"="#f57d55",
+    "DNA/IS3EU"="#f58045","DNA/Kolobok"="#f58350","DNA/Maverick"="#f5835c",
+    "DNA/Merlin"="#f68a63","DNA/MULE"="#f59658","DNA/Mutator"="#f59060",
+    "DNA/P"="#f59b63","DNA/PIF"="#f7a27d","DNA/PiggyBac"="#f5a078",
+    "DNA/Sola"="#f59770","DNA/TcMar"="#f69670","DNA/Zator"="#f7a890",
+    "DNA/Zisupton"="#fad0bd","LINE"="#2e158f","LINE/CR1"="#170088",
+    "LINE/CRE"="#3e2897","LINE/Dong"="#4d399f","LINE/I"="#5a4ea0",
+    "LINE/L1"="#594aa7","LINE/L2"="#665cae","LINE/Penelope"="#7f6bbf",
+    "LINE/Proto2"="#8a7fd0","LINE/R1"="#888ec6","LINE/R2"="#9eb2d5",
+    "LINE/Rex"="#a8c4dd","LINE/RTE"="#c5d8fd","LTR"="#186310",
+    "LTR/BEL"="#27711f","LTR/Copia"="#367f2d","LTR/DIRS"="#448e3b",
+    "LTR/ERV"="#3e8f3c","LTR/ERV1"="#529d49","LTR/ERVK"="#5fae55",
+    "LTR/Gypsy"="#4fae50","LTR/Ngaro"="#50b15b","LTR/Pao"="#4fae50",
+    "MITE"="#6ebc67","nMITE"="#6ebc67","nLTR"="#69c36a",
+    "nLTR/DIRS"="#5fbf5a","nLTR/LINE"="#66CC66","nLTR/PLE"="#99ec95",
+    "nLTR/SINE"="#b2d7e4","Other/DNA_virus"="#d0d0d0",
+    "PLE/Chlamys"="#b2d7e4","PLE/Hydra"="#b2d7e4","PLE/Naiad"="#b2d7e4",
+    "RC/Helitron"="#f720fa","Retroposon/RTE"="#3e2897","Satellite"="#b0b0b0",
+    "Simple_repeat"="#909090","SINE"="#9e23eb","SINE/5S"="#a539ec",
+    "SINE/Alu"="#b159ef","SINE/B2"="#b373f0","SINE/B4"="#b58cf1",
+    "SINE/ID"="#baabf2","SINE/U"="#dfcdf7","unknown"="#707070")
+  
+  group_colors <- master_colors[names(master_colors) %in% levels(kDat.plot$ident)]
+  
+  #Compute % of stack for hover
+  kDat.hover <- kDat.plot %>%
+    group_by(perc) %>%
+    mutate(
+      column_total = sum(cov),
+      pct_of_column = (cov / column_total) * 100
+    ) %>%
+    ungroup()
+  
+  #subfamily plot
+  pSub <- ggplot(kDat.hover,
+                 aes(x = perc, 
+                     y = cov, 
+                     fill = ident)) +
+    geom_bar(stat = "identity", position = position_stack(reverse = TRUE)) +
+    scale_fill_manual(name = "Families", values = group_colors) +
+    xlim(-1, 50) +
+    labs(x = "Kimura Substitution Level (%)", y = "Genome Proportion") +
+    theme_bw()
+  
+  ggsave(paste0('repSubFamKimura_', fname_base, '.pdf'),
+         pSub, width=13, height=6)
+  
+  
+  #make interactive on hover (html)
+  pSub_interactive <- pSub +
+    aes(text = paste0(
+      "Element: ", ident,
+      "<br>% of stack: ", sprintf("%.2f", pct_of_column), "%",
+      "<br>Coverage: ", signif(cov, 3),
+      "<br>Kimura: ", perc, "%"
+    ))
+  
+  p_html <- ggplotly(pSub_interactive, tooltip = "text")
+  
+  htmlwidgets::saveWidget(p_html,
+                          paste0("repSubFamKimura_", fname_base, ".html"),
+                          selfcontained = TRUE)
+  
+}
+
+#run function for divsum file of each genome
+kimP("kimura_GENOME.txt", genome size)
