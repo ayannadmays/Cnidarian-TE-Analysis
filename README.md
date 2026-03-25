@@ -1,13 +1,16 @@
 # Overview
 
 Manuscript: 
+Comparative analysis of transposable elements in jellyfish and hydroid species (Cnidaria: Medusozoa)
+Ayanna Mays, Feresa Cabrera, Aide Macias-Muñoz
+
 ## Platforms used
   - UCSC Hummingbird Computing cluster in command line
   - RStudio
 
 ## Packages and dependencies
   - repeatmodeler v2.0.5
-  - DeepTE
+  - DeepTE (https://github.com/LiLabAtVT/DeepTE)
 
 ### Use conda to install (per https://github.com/LiLabAtVT/DeepTE)
   - conda create -n py36 python=3.6
@@ -21,7 +24,7 @@ Manuscript:
 ## Methodology
 We downloaded genomes from NCBI genome bank and processed them through multiple functions of the repeatmodeler module (repeatmodeler, repeatmasker, calcdiv, etc). 
  1. Use repeatmodeler to build database for each genome
- 2. merge libraries together using cat (families file)
+ 2. merge libraries (-families.fa file) together using cat
  3. remove redundancies using CD-hit
  4. extract out Unknown TEs with Seqkt
  5. Annotate unknowns with  DeepTE
@@ -31,4 +34,4 @@ We downloaded genomes from NCBI genome bank and processed them through multiple 
  10. Create repeatlandscape in Rstudio (per https://github.com/cejuliano/brown_hydra_genomes/blob/main/02_repeatMasking/04_visRep/kimuraPlot.R)
 
 # Data availability
-https://ayannadmays.github.io/Cnidarian-TE-Analysis/repSubFamKimura_kimura_boug.html
+Links to interactive repeat landscape graphs are available in "interactive_landscapes_link" file
