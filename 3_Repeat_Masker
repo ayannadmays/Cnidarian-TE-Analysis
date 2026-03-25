@@ -21,6 +21,6 @@ export LC_ALL='C'
 module load repeatmodeler
 
 #run repeatmasker, -lib specifies the library you want to use, -pa is the number of threads (power) you want to use, then put the genome fasta file, -a says you want it to do alignment analysis (needed for calcdiv)
-RepeatMasker -lib /hb/home/aymays/cnidarianTE/medusozoa_rep_lib/2medusozoa_rep_lib_C.fasta -pa 16 species_name.fna -a
+RepeatMasker -lib PATH/TO/FILE/2medusozoa_rep_lib_C.fasta -pa 16 species_name.fna -a
 
 
