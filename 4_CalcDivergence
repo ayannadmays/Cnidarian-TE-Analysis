@@ -1,6 +1,5 @@
-/hb/groups/macias-munoz_lab/calcDivergenceFromAlignment_custom.pl
+### job script for calcdiv ###
 
-my job script was: 
 #!/bin/bash
 
 #SBATCH --job-name=medusozoa_calcdiv_          
@@ -15,9 +14,13 @@ my job script was:
 #SBATCH --account=pi-amaciasmunoz        
 #SBATCH --output=medusozoa_calcdiv_.out
 
+#load module
 module load repeatmodeler
-perl /hb/groups/macias-munoz_lab/calcDivergenceFromAlignment_custom.pl -s hydraAEP_custom2.divsum -tbl hydra_AEP.fna.tbl hydra_AEP.fna.align
 
-#next; replace aep.divsum with the name of divsum file and kimuraAEP.txt with name of your species eg. kimura_aur_aur.txt
+#run calcdiv custom script derived from (https://github.com/Dfam-consortium/RepeatMasker/blob/master/util/calcDivergenceFromAlign.pl) with .divsum .tbl and .align files as input
+perl calcDivergenceFromAlignment_custom.pl -s hydraAEP.divsum -tbl hydra_AEP.fna.tbl hydra_AEP.fna.align
+
+#replace aep.divsum with the name of divsum file and kimuraAEP.txt with name of your species eg. kimura_aur_aur.txt
 csplit -f aepDiv aep.divsum '/Coverage for each repeat/' '{0}' && sed '1d' aepDiv01 > kimuraAEP.txt && rm aepDiv0*
 
+#kimuraGENOME.txt file will be used as input in R code for repeat landscape analysis
